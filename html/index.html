@@ -3,22 +3,49 @@
 
 <head>
   <title>RandomGame</title>
-  <style>
-
-  </style>
-  <script>
-
-  </script>
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  </head>
+</head>
 
 <body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>
+    var socket = io.connect();
+    var users;
+    socket.on('listing', function (data) {
+      users = data;
+    });
+    function message(user, message) {
+      socket.emit('message', {
+        user: user,
+        message: message
+      });
+    }
+    function recupID() {
+      var id = document.getElementById("text").value;
+      console.log(id);
+      socket.id = id;
+    }
+  </script>
+  </div>
+
+  <form method="post" action="/">
+    <input type="text" name="user[name]">
+    <input type="submit" value="Submit" onclick="window.location.href='index2.html'">
+  </form>
+  <!-- <input type="text" name="text" id="text">
+  <input type="button" name="send" id="send" value="send" onclick="recupID()"> -->
+</body>
+
+
+
+
+
+<!-- <body>
   <div style="text-align: center; width: 50%; margin-left:25%">
     <label id="1">Choisissez un pseudo</label>
-    <input class="usernameInput" type="text" maxlength="14" />
-    <input class="favorite styled" type="button" value="Connexion" onclick="window.location.href='index2.html'">
+    <input id="id" type="text" maxlength="14" />
+    <input id="connexion" type="button" value="Connexion" onclick="recupID()">
   </div>
-</body>
+</body> -->
 
 </html>
