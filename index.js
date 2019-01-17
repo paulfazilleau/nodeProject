@@ -1,11 +1,14 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 var numberUser = 0;
 var diceMax = 0;
 
+app.use(express.static('html'));
+
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/html/index.html');
 });
 
 io.on('connection', function(socket){
@@ -45,6 +48,7 @@ io.on('connection', function(socket){
     });
   });
 });
+
 
 function gameon() {
   for (let index = 0; index < numberUser; index++) {
