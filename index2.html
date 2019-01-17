@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>RandomGame</title>
+  <style>
+  
+  </style>
+  <script>
+    function lancer() {
+      var q = Math.floor(Math.random() * 6) + 1;
+      if (q === 1) document.getElementById('1').innerHTML = '1';
+      if (q === 2) document.getElementById('1').innerHTML = '2';
+      if (q === 3) document.getElementById('1').innerHTML = '3';
+      if (q === 4) document.getElementById('1').innerHTML = '4';
+      if (q === 5) document.getElementById('1').innerHTML = '5';
+      if (q === 6) document.getElementById('1').innerHTML = '6';
+      document.getElementById('res').innerHTML = 'Résultat : ' + parseInt(q);
+    }
+  </script>
+  </head>
+
+<body>
+  <div style="text-align: center; width: 50%; margin-left:25%">
+    <label id="1"></label>
+    <input class="favorite styled" type="button" value="Combat !" onclick="lancer()">
+    <div style="text-align: left; position: absolute;">
+      <input type="button" value="Choisir 1">
+    </div>
+    <div style="text-align: right; position: relative;">
+      <input type="button" value="Choisir 2">
+    </div>
+  </div>
+</body>
+
+</html>
