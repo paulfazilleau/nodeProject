@@ -22,8 +22,29 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
-});
+  socket.on('disconnect', () => {
+    if (addedUser) {
+      --numUsers;
 
+      // echo globally that this client has left
+      socket.broadcast.emit('user left', {
+        username: socket.username,
+        numUsers: numUsers
+      });
+    }
+  });
+  socket.on('add user', (username) => {
+    if (addedUser) return;
+
+    // we store the username in the socket session for this client
+    socket.username = username;
+    ++numUsers;
+    addedUser = true;
+    socket.emit('login', {
+      numUsers: numUsers
+    });
+  });
+});
 
 function gameon() {
   for (let index = 0; index < numberUser; index++) {
@@ -35,33 +56,10 @@ function gameon() {
   }
   console.log("${user} as won");
 }
-window.setInterval(gameon, 10000);
+setInterval(gameon, 10000);
 
 
  // when the user disconnects.. perform this
-socket.on('disconnect', () => {
-  if (addedUser) {
-    --numUsers;
-
-    // echo globally that this client has left
-    socket.broadcast.emit('user left', {
-      username: socket.username,
-      numUsers: numUsers
-    });
-  }
-});
-
-socket.on('add user', (username) => {
-  if (addedUser) return;
-
-  // we store the username in the socket session for this client
-  socket.username = username;
-  ++numUsers;
-  addedUser = true;
-  socket.emit('login', {
-    numUsers: numUsers
-  });
-});
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
