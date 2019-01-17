@@ -1,0 +1,5 @@
+Ajouter un dé à la base:
+INSERT INTO `Dice` (`Id`, `Name`, `Color`, `Size`, `Result`) VALUES ('${Id de connexion}', '${Nom du dé}', '${Couleur du dé}', '${Taille du dé}', '${Valeur du jet}');
+
+Modifier une valeur dans la base:
+UPDATE 'Dice' SET 'Result' = '${Valeur du jet}' WHERE 'Name' = '${Pseudo}';
