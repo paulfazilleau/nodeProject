@@ -40,7 +40,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         const connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: 'root',
+            password: '',
             database: 'RandomGame'
         });
 
