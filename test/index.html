@@ -24,6 +24,7 @@
     <input type="button" id="envoi_color" value="Choisir une couleur" onclick="color()"/>
     <br/>
     <input type="button" id="envoi_number" value="Lancer le dé" onclick="lancer()"/>
+    <input type="button" id="suppr_lancer" value="Supprimer les lancer" onclick="supprLancer()"/>
     <input type="button" id="envoi_combat" value="Lancer un combat" onclick="combat()"/>
   </form>
 
@@ -61,6 +62,10 @@
       console.log(number);
       document.getElementById("nombre").innerHTML = number;
       socket.emit('lancer_dice', number);
+    }
+
+    function supprLancer() {
+      socket.emit('suppr_lancer');
     }
 
     //fonction de combat
