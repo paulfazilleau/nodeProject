@@ -7,7 +7,8 @@ var app = require('express')(),
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
-
+const helmet = require('helmet')
+app.use(helmet())
 
 //connexion a la base données mysql
 var mysql = require('mysql');
