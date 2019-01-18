@@ -21,7 +21,7 @@ io.sockets.on('connection', function (socket, pseudo) {
     socket.on('message', function (message) {
         message = ent.encode(message);
         socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
-    }); 
+    });
 
     socket.on('nouveau_color', function(color) {
         socket.color = color;
@@ -41,13 +41,14 @@ io.sockets.on('connection', function (socket, pseudo) {
         var con = mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: '',
+            password: 'root',
             database: 'RandomGame'
         });
 
         con.connect(function (err) {
             if (err) throw err;
-            con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES (" + socket.pseudo + "," + socket.color + "," + socket.size + "," + socket.number + "');", function (err, result, fields) {
+            console.log("Le pseudo est :" + socket.pseudo);
+            con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result, fields) {
                 if (err) throw err;
                 console.log(result);
             });
@@ -56,4 +57,4 @@ io.sockets.on('connection', function (socket, pseudo) {
 });
 
 server.listen(8080);
-console.log('Ecoute sur le port :8080');
+console.log('Ecoute sur le port: 8080');
