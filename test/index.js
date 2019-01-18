@@ -12,7 +12,8 @@ app.get('/', function(req, res){
 //connexion a la base données mysql
 var mysql = require('mysql');
 
-var con = mysql.createConnection({
+var pool = mysql.createPool({
+  connectionLimit: 10,
   host: 'localhost',
   user: 'root',
   password: 'root',
@@ -50,22 +51,36 @@ io.sockets.on('connection', function (socket, pseudo) {
     socket.on('lancer_dice', function(number) {
       socket.number = number;
       console.log(socket.number);
-      con.connect(function (err) {
+      pool.getConnection(function (err, connection) {
         if (err) throw err;
-        con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result) {
+        connection.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result) {
+          connection.release();
           if (err) throw err;
           //console.log(result);
         });
       });
     });
 
-    socket.on('nouveau_combat', function (combatnumber) {
-      con.query("SELECT `name` FROM `dice` WHERE `result`=(SELECT max(`result`) FROM `dice`);", function(err, result) {
+    socket.on('suppr_lancer', function() {
+      pool.getConnection(function (err, connection) {
         if (err) throw err;
-        var string = JSON.stringify(result);
-        console.log(string);
-        var winner = JSON.parse(string);
-        console.log(winner.name);
+        connection.query("DELETE FROM dice WHERE id > 1;", function (err, result) {
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    });
+
+    socket.on('nouveau_combat', function (combatnumber) {
+      pool.getConnection(function (err, connection) {
+        connection.query("SELECT `name` FROM `dice` WHERE `result`=(SELECT max(`result`) FROM `dice`);", function(err, result) {
+          connection.release();
+          if (err) throw err;
+          var string = JSON.stringify(result);
+          console.log(string);
+          var winner = JSON.parse(string);
+          console.log(winner.name);
+        })
       });
     });
 });
