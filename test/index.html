@@ -33,12 +33,16 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     // Connexion à socket.io
-    //var socket = io.connect('http://localhost:8080');
       var socket = io.connect(window.location.origin);
 
     // On demande le pseudo, on l'envoie au serveur et on l'affiche dans le titre
     var pseudo = prompt('Quel est votre pseudo ?');
     socket.emit('nouveau_client', pseudo);
+    while(pseudo === "" || pseudo === null || pseudo === "\n" || pseudo === " ") {
+	var pseudo = prompt('Quel est votre pseudo ?');
+        socket.emit('nouveau_client', pseudo);
+	}
+
     document.title = pseudo + ' - ' + document.title;
 
     function sizeDice() {
