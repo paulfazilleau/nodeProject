@@ -40,7 +40,7 @@ http.listen(3000, function(){
   console.log('Ecoute sur le port :3000');
 });
 
-
+//console externes avec les connexion et tout 
 
 
 //var numberUser = 0;
