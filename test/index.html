@@ -38,13 +38,16 @@
     // On demande le pseudo, on l'envoie au serveur et on l'affiche dans le titre
     var pseudo = prompt('Quel est votre pseudo ?');
     socket.emit('nouveau_client', pseudo);
+
+    //tant que le pseudo est null ou espace ou retour a la ligne, le prompt réaparait pour demander le pseudo
     while(pseudo === "" || pseudo === null || pseudo === "\n" || pseudo === " ") {
 	var pseudo = prompt('Quel est votre pseudo ?');
         socket.emit('nouveau_client', pseudo);
-	}
+	}//TODO Le script casse et envoie une erreur si le pseudo est vide avec un "expected : string"
 
     document.title = pseudo + ' - ' + document.title;
 
+    //Fonctions lié aux boutons pour les informations
     function sizeDice() {
       var size = prompt('Quel est votre taille ?');
       socket.emit('nouveau_size', size);
@@ -60,6 +63,7 @@
       socket.emit('lancer_dice', number);
     }
 
+    //fonction de combat
     function combat(pseudo, number) {
       socket.emit('nouveau_combat');
     }

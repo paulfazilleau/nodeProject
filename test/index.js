@@ -8,6 +8,8 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+
+//connexion a la base données mysql
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
@@ -17,6 +19,8 @@ var con = mysql.createConnection({
   database: 'RandomGame'
 });
 
+
+//connexion aux modules socket.io
 io.sockets.on('connection', function (socket, pseudo) {
     // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
     socket.on('nouveau_client', function(pseudo) {
@@ -32,6 +36,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
     });
 
+    //log des inputs des boutons avec les info
     socket.on('nouveau_color', function(color) {
         socket.color = color;
         console.log(socket.color);
@@ -40,6 +45,8 @@ io.sockets.on('connection', function (socket, pseudo) {
         socket.size = size;
         console.log(socket.size);
     });
+
+    //lancement du dé pour l'utilisateur
     socket.on('lancer_dice', function(number) {
       socket.number = number;
       console.log(socket.number);
@@ -63,5 +70,6 @@ io.sockets.on('connection', function (socket, pseudo) {
     });
 });
 
+//écoute du port 8080 pour l'accès a la page
 server.listen(8080);
 console.log('Ecoute sur le port: 8080');
