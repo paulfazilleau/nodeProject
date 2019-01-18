@@ -41,17 +41,17 @@ io.sockets.on('connection', function (socket, pseudo) {
         console.log(socket.size);
     });
     socket.on('lancer_dice', function(number) {
-        socket.number = number;
-        console.log(socket.number);
-        con.connect(function (err) {
+      socket.number = number;
+      console.log(socket.number);
+      con.connect(function (err) {
+        if (err) throw err;
+        con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result) {
           if (err) throw err;
-          con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result) {
-            if (err) throw err;
-            //console.log(result);
-          });
+          //console.log(result);
         });
+      });
     });
-    
+
     socket.on('nouveau_combat', function (combatnumber) {
       con.query("SELECT `name` FROM `dice` WHERE `result`=(SELECT max(`result`) FROM `dice`);", function(err, result) {
         if (err) throw err;
