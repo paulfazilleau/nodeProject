@@ -36,40 +36,22 @@ io.sockets.on('connection', function (socket, pseudo) {
         console.log(socket.number);
     });
     socket.on('nouveau_combat', function (combatnumber) {
-        const mysql = require('mysql');
-        const connection = mysql.createConnection({
+        var mysql = require('mysql');
+
+        var con = mysql.createConnection({
             host: 'localhost',
             user: 'root',
             password: '',
             database: 'RandomGame'
         });
 
-        connection.beginTransaction(function (err) {
-            if (err) {
-                connection.end();
-                throw err;
-            }
-
-            connection.query("INSERT INTO `dice` (`id`, `name`, `color`, `size`, `result`) VALUES ('" + socket.pseudo + "," + socket.pseudo + "," + socket.color + "," + socket.size + "," + socket.number + "');", function (error, results, fields) {
-                if (error) {
-                    return connection.rollback(function () {
-                        connection.end();
-                        throw error;
-                    });
-                }
-
-                connection.commit(function (err) {
-                    if (err) {
-                        return connection.rollback(function () {
-                            connection.end();
-                            throw err;
-                        });
-                    }
-                    console.log('Success !');
-                });
+        con.connect(function (err) {
+            if (err) throw err;
+            con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES (" + socket.pseudo + "," + socket.color + "," + socket.size + "," + socket.number + "');", function (err, result, fields) {
+                if (err) throw err;
+                console.log(result);
             });
         });
-
     });
 });
 
