@@ -3,10 +3,10 @@
 
 <head>
   <title>RandomGame</title>
-  <style>
-  
-  </style>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script>
+    var socket = io.connect();
     function lancer() {
       var q = Math.floor(Math.random() * 6) + 1;
       if (q === 1) document.getElementById('1').innerHTML = '1';
@@ -15,12 +15,64 @@
       if (q === 4) document.getElementById('1').innerHTML = '4';
       if (q === 5) document.getElementById('1').innerHTML = '5';
       if (q === 6) document.getElementById('1').innerHTML = '6';
-      document.getElementById('res').innerHTML = 'Résultat : ' + parseInt(q);
+
+      console.log(socket.id);
+      var color = document.getElementById("color").value;
+      console.log(color);
+      var size = document.getElementById("size").value;
+      console.log(size);
+
+      if (socket.id == "" || color == "" || size == "" || q == "") {
+        socket.id = "error";
+        color = "null";
+        size = "null";
+        q = "null";
+      }
+      
+      const mysql = require('mysql');
+      const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'RandomGame'
+      });
+
+      connection.beginTransaction(function (err) {
+        if (err) {
+          connection.end();
+          throw err;
+        }
+
+        connection.query("INSERT INTO `dice` (`id`, `name`, `color`, `size`, `result`) VALUES (`" + socket.id + "`, `" + socket.id + "`, `" + color + "`, `" + size + "`, `" + q + "`) ;", function (error, results, fields) {
+          if (error) {
+            return connection.rollback(function () {
+              connection.end();
+              throw error;
+            });
+          }
+
+          connection.commit(function (err) {
+            if (err) {
+              return connection.rollback(function () {
+                connection.end();
+                throw err;
+              });
+            }
+            console.log('Success !');
+          });
+        });
+      });
+
     }
   </script>
-  </head>
+</head>
 
-<body>
+<body style="background: grey">
+  <label id="erreur"></label>
+  <label>Saisissez une couleur</label>
+  <input type="text" id="color">
+  <label>Saisissez une taille</label>
+  <input type="text" id="size">
   <div style="text-align: center; width: 50%; margin-left:25%">
     <label id="1"></label>
     <input class="favorite styled" type="button" value="Combat !" onclick="lancer()">

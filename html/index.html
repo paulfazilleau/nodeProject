@@ -5,7 +5,7 @@
   <title>RandomGame</title>
 </head>
 
-<body>
+<body style="background: grey">
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script>
@@ -29,6 +29,7 @@
   </div>
 
   <form method="post" action="/">
+    <label>Saisissez un pseudo</label>
     <input type="text" name="user[name]">
     <input type="button" value="Submit" onclick="window.location.href='index2.html'">
   </form>
