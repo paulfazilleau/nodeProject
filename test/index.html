@@ -14,22 +14,24 @@
 </head>
 
 <body style="background: grey">
-  <h5>Le super Chat temps réel !</h5>
-  Votre chiffre : <label id="nombre"></label>
+  <h2 style="text-align: center">Random Game</h2>
+  <div style="text-align: left; position: absolute; ">
+    Votre chiffre : <label id="nombre"></label>
+    <form action="/" method="post" id="formulaire_chat">
+      <input type="button" id="envoi_size" value="Choisir une taille" onclick="sizeDice()" />
+      <input type="button" id="envoi_color" value="Choisir une couleur" onclick="color()" />
+      <br/>
+      <input type="button" id="envoi_number" value="Lancer le dé" onclick="lancer()" />
+      <input type="button" id="suppr_lancer" value="Supprimer les lancers" onclick="supprLancer()"/>
+      <input type="button" id="envoi_combat" value="Lancer un combat" onclick="combat()" />
+    </form>
+  </div>
+  <div style="text-align: right; position: relative;">
 
-  <form action="/" method="post" id="formulaire_chat">
     <input type="text" name="message" id="message" placeholder="Votre message..." size="50" autofocus />
     <input type="submit" id="envoi_message" value="Envoyer" />
-    <input type="button" id="envoi_size" value="Choisir une taille" onclick="sizeDice()"/>
-    <input type="button" id="envoi_color" value="Choisir une couleur" onclick="color()"/>
-    <br/>
-    <input type="button" id="envoi_number" value="Lancer le dé" onclick="lancer()"/>
-    <input type="button" id="suppr_lancer" value="Supprimer les lancer" onclick="supprLancer()"/>
-    <input type="button" id="envoi_combat" value="Lancer un combat" onclick="combat()"/>
-  </form>
-
-  <section id="zone_chat"> </section>
-
+    <section id="zone_chat"> </section>
+  </div>
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
