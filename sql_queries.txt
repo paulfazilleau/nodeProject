@@ -3,3 +3,6 @@ INSERT INTO `dice` (`id`, `name`, `color`, `size`, `result`) VALUES ('${Id de co
 
 Modifier une valeur dans la base:
 UPDATE 'dice' SET 'Result' = '${Valeur du jet}' WHERE 'name' = '${Pseudo}';
+
+Récupérer le nom du dé avec le plus grand jet:
+SELECT name FROM dice WHERE result=(SELECT max(result) FROM dice);
