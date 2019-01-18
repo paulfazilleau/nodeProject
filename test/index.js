@@ -8,6 +8,15 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'RandomGame'
+});
+
 io.sockets.on('connection', function (socket, pseudo) {
     // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
     socket.on('nouveau_client', function(pseudo) {
@@ -31,28 +40,26 @@ io.sockets.on('connection', function (socket, pseudo) {
         socket.size = size;
         console.log(socket.size);
     });
-    socket.on('nouveau_number', function(number) {
+    socket.on('lancer_dice', function(number) {
         socket.number = number;
         console.log(socket.number);
-    });
-    socket.on('nouveau_combat', function (combatnumber) {
-        var mysql = require('mysql');
-
-        var con = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'root',
-            database: 'RandomGame'
-        });
-
         con.connect(function (err) {
+          if (err) throw err;
+          con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result) {
             if (err) throw err;
-            console.log("Le pseudo est :" + socket.pseudo);
-            con.query("INSERT INTO `dice` (`name`, `color`, `size`, `result`) VALUES ('"+ socket.pseudo +"', '"+ socket.color +"', '"+ socket.size +"', '"+ socket.number +"');", function (err, result, fields) {
-                if (err) throw err;
-                console.log(result);
-            });
+            //console.log(result);
+          });
         });
+    });
+    
+    socket.on('nouveau_combat', function (combatnumber) {
+      con.query("SELECT `name` FROM `dice` WHERE `result`=(SELECT max(`result`) FROM `dice`);", function(err, result) {
+        if (err) throw err;
+        var string = JSON.stringify(result);
+        console.log(string);
+        var winner = JSON.parse(string);
+        console.log(winner.name);
+      });
     });
 });
 

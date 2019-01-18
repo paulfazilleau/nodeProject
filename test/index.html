@@ -22,8 +22,8 @@
     <input type="submit" id="envoi_message" value="Envoyer" />
     <input type="button" id="envoi_size" value="Choisir une taille" onclick="sizeDice()"/>
     <input type="button" id="envoi_color" value="Choisir une couleur" onclick="color()"/>
-    <input type="button" id="envoi_number" value="Prendre un nombre" onclick="number()"/>
     <br/>
+    <input type="button" id="envoi_number" value="Lancer le dé" onclick="lancer()"/>
     <input type="button" id="envoi_combat" value="Lancer un combat" onclick="combat()"/>
   </form>
 
@@ -48,12 +48,13 @@
       var color = prompt('Quel est votre couleur ?');
       socket.emit('nouveau_color', color);
     }
-    function number() {
+    function lancer() {
       var number = Math.floor(Math.random() * 6) + 1;
       console.log(number);
       document.getElementById("nombre").innerHTML = number;
-      socket.emit('nouveau_number', number);
+      socket.emit('lancer_dice', number);
     }
+
     function combat(pseudo, number) {
       socket.emit('nouveau_combat');
     }
